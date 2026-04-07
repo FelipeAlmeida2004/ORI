@@ -1,6 +1,52 @@
 
 # Anotações da Disciplina de ORI
 
+## 📑 Sumário
+
+- [1. Armazenamento Volátil](#1-armazenamento-volátil)
+  - [1.1 HD (Disco Rígido)](#11-hd-disco-rígido)
+    - [Estrutura](#estrutura)
+    - [Desempenho](#desempenho)
+    - [Capacidade de Armazenamento](#capacidade-de-armazenamento)
+    - [Tempo de Acesso](#tempo-de-acesso)
+    - [Organização](#organização)
+    - [Sistema FAT](#sistema-fat)
+    - [Página de Disco](#página-de-disco)
+    - [Recursos](#recursos)
+    - [TDAA](#tdaa-tabela-descritiva-de-arquivos-abertos)
+    - [TAAP](#taap-tabela-de-arquivos-abertos-por-processo)
+    - [RAID](#raid-redundant-array-of-independentinexpensive-disks)
+- [2. Arquivos em C](#2-arquivos-em-c)
+  - [Ponteiro de arquivo](#ponteiro-de-arquivo)
+  - [Comando `fopen`](#comando-fopen)
+  - [Comando `fclose`](#comando-fclose)
+  - [Comando `fputc`](#comando-fputc)
+  - [Comando `fgetc`](#comando-fgetc)
+  - [Comando `feof`](#comando-feof)
+  - [Comando `fputs`](#comando-fputs)
+  - [Comando `fgets`](#comando-fgets)
+  - [Comando `fwrite`](#comando-fwrite)
+  - [Comando `fread`](#comando-fread)
+  - [Comando `fpritf`](#comando-fpritf)
+  - [Comando `fscanf`](#comando-fscanf)
+  - [Comando `fseek`](#comando-fseek)
+- [3. Organização em Campos e Registros](#3-organização-em-campos-e-registros)
+  - [Organização de arquivos](#organização-de-arquivos)
+  - [Campos de tamanho fixo](#campos-de-tamanho-fixo)
+  - [Campos com indicador de comprimento](#campos-com-indicador-de-comprimento)
+  - [Campos separados por delimitadores](#campos-separados-por-delimitadores)
+  - [Campos separados por tags](#campos-separados-por-tags)
+  - [Organização de arquivos em registros](#organização-de-arquivos-em-registros)
+  - [Registros de tamanho fixo](#registros-de-tamanho-fixo)
+  - [Campo de tamanho fixo](#campo-de-tamanho-fixo)
+  - [Campo de tamanho váriavel](#campo-de-tamanho-váriavel)
+  - [Número fixo de campos e Uso de delimitadores](#número-fixo-de-campos-e-uso-de-delimitadores)
+  - [Indicador de tamanho](#indicador-de-tamanho)
+  - [Uso de índice](#uso-de-índice)
+  - [Registro com delimitador e de campo e de registro](#registro-com-delimitador-e-de-campo-e-de-registro)
+  - [Header records](#header-records)
+- [4. Acesso, Manutenção e Reuso de espaço](#4-acesso-manutenção-e-reuso-de-espaço)
+
 ---
 
 ## 1. Armazenamento Volátil
@@ -389,7 +435,7 @@ Nesse método temos a inserção de um caracter especial no final de cada campo,
 ### Campos separados por tags
 Nesse método temos a separação dos campos por uma tag do tipo "keyword=value" e adicionando um caracter especial no final do campo. Dessa forma, temos como vantagem a fácil identificação do campos e os seus valores, porém ainda mantemos o atraso de leituras pela a adição de mais um passo de leitura.
 
-## 3.1 Organização de arquivos em registros
+## Organização de arquivos em registros
 Como dito anteriormente temos que um registro é um conjuto de campos que são agrupados de tal forma a ser manter uma associação a uma entidade lógica. E como anteriormente também temos métodos de regsitros.
 
     - Registros com tamanho fixo
@@ -403,34 +449,136 @@ Como dito anteriormente temos que um registro é um conjuto de campos que são a
         - Uso de índice
 
 ### Registros de tamanho fixo
-Nesse método temos um valor fixo para todos os registros, podendo ter campos de tamnho fixo ou de tamanho variável. Exemplo disso são as strucs em C.
+Nesse método temos um valor fixo para todos os registros, podendo ter campos de tamanho fixo ou de tamanho variável. Exemplo disso são as strucs em C.
 
-Esse método permite acessar diretamente cada regsitro utilizando o RRN(Relative Record Number). Porém, pode causar desperdicio de memória secundária.
+Esse método permite acessar diretamente cada regsitro utilizando o RRN(Relative Record Number). Porém, pode causar desperdício de memória secundária.
+
+#### Campo de tamanho fixo
+**RRN**: Precisa que os campos tenham tamannho fixo para serem acessados.
+- Precisa de uma posição de início do regsitro(byte offset)
+- Byte offset = RRN * T
+
+Ex: Acessar um registro na posição lógica 546, e cada campo possui tamanho 128. Logo temos:
+
+Byte Offset = 546 x 128 = 69.888 bytes
+
+#### Campo de tamanho váriavel
+Nesse método temos o acréscimo de um espaço vazio ao final de cada campo.
+
+### Registros com tamanho variável
+
+#### Número fixo de campos e Uso de delimitadores
+Nesse método temos que cada registro possui um número fixo de campos, em que o tamanho do resgitro é variável, podendo ser combinada com uma estrutura de tamanho de variável do campo. Além de possuir um delimitador para separar os campos. Dessa forma, a vantagem de método é te campos sem espaços vazios, mas as possui como desvantagens o overhead, necessidade de tratamento dos delimitadores e a necessidade de leitura do byte de tamanho.
+
+#### Indicador de tamanho
+Nesse método temos a utlização de um indicador de tamanho na frente de cada registro, e os campos são separados internamente por separadores. Dessa froma, a vantagem é ter campos de dados sem espaços vazios, oferece solução para registros de tamanho variável e permite acesso direto ao registro seguinte. E como desvantagem temos o overhead.
+
+#### Uso de índice
+Nesse método temos a utilização de um arquivo secundário que armazena o endereço do primeiro byte de cada registro. Além de fazer o uso de delimitadores para os campos e indica o deslocamento de cada registro referente ao inicio do arquivo. Dessa forma, temos como vantagem a flexibilidade e como desvantagem é a necessidade de usar 2 arquivos além de passo a mais de pesquisa.
+
+### Registro com delimitador e de campo e de registro
+Nesse método temos a utilização de dois tipos de delimitadores que devem ser diferentes entre si, em que um sera para delimitar cada campo e um para cada regsitro. Dessa forma, temos como vantagem campos sem espaços vazios e permite um número variável de campos e como desvantagem temos o overhead, leitura byte a byte e filtrar os delimitadores.
+
+### Header records
+Serve para guardar a estrutura do arquivo em um cabeçalho
+
+- Arquivo TIF: Amazena várias imagens dentro de um arquivo.
 
 
 ## 4. Acesso, Manutenção e Reuso de espaço
 
-#### Registro de campos com tamanho fixo
+### Registro de campos com tamanho fixo
 
-#### Manipulação de dados
+### Manipulação de dados
 
     - Inserção
     - Atualização
     - Remoção
 
-#### Reorganização imediata
+#### Inseção
+![alt text](image.png)
 
-#### Compactação e reuso
+#### Atualização
+![alt text](image-1.png)
+
+No caso de acrecimo de tamanho ou campo de tamanho variável é necessário remover o registro para que ele seja atualizado.
+
+## Remoção
+ - ### Reorganização imediata
+    ![alt text](image-2.png)
+
+    Elimina o registro e reoganiza o indice dos regitros que se mantiveram.
+
+ - ### Compactação e reuso
+    A compactação busca por regiões do aquivo que não há dados e recupera os dados perdidos.
 
     - Reuso estático
     - Reuso dinâmico
         - Tamanho fixo
         - Tamanho variável
 
+ - ### Reuso estático
+    Utiliza de um campo a mais para usar de estado para o registro para identificar campos removidos.
+
+    Usa da remoção lógica, sendo a remoção do registro, gerando espaços inuteis e reagrupa os registros.
+
+     - O registro é marcado para ser removido.
+     - Depois de determinado tempo, o sistema remove o registro marcado.
+     - Após as remoção e feita a reorganização do indeces e feita a compatação do arquivo para remover os espaços vázios.
+
+    ###
+
+    **OBS:** Antes de ser removido o registro marcado pode ser feita inserções que serão reorganizadas na remoção.
+
+    ####
+
+    ![alt text](image-4.png) 
+    ![alt text](image-3.png)
+
+ - ### Reuso dinâmico
+
+    - Tamanho fixo: 
+        Utilização de lista encadeada para registros elimindados.
+
+        No reuso dinâmico temos uma lista composta por RRNS marcados como removidos, armazena o cabeçalho do arquivo na cabeça da lista e inserção e reuso são feitas sempre no início da lista.
+        ###
+        ![alt text](image-5.png)
+        ![alt text](image-6.png)
+        ![alt text](image-7.png)
+        ![alt text](image-8.png)
+        ###
+    - Tamanho variável:
+        Como no tamanho fixo também precisamos de uma lista encadeada para os registros eliminados.
+        Além disso mantemos a utilização de RRNS aramazendo o cabeçalho do arquivo na cabeça da lista, mas nesse caso precisamos guardar o tamanho do regsitro e a inserção será feita no início da lista.
+        ###
+        * Atualização
+            - Se tamanho do registro é suficiente, ocorre no próprio registro; senão, remove e inclui
+        ###
+        * Reuso de espaço
+            - Realiza uma busca sequencial na lista
+            - Se encontrou espaço disponível no tamanho adequado
+            - Então reaproveita o espaço para armazenar o novo registro, usando uma estratégia de alocação
+            - Senão insere o novo registro no final do arquivo
+            - O tamanho do registro que foi removido deve ser do tamanho adequado, ou seja, “grande o suficiente” para que os dados do novo registro usem aquele espaço
+        ###
+        * Estratégias de Alocação
+            - First-Fit: Utiliza o primeiro espaço que tiver tamanho suficiente
+            - Best-Fit: Escolhe o espaço mais justo possível
+            - Worst-Fit: Escolhe o maior espaço possível
+
+        ###
+        ![alt text](image-9.png)
+###
+
 #### Fragmentação interna
+ - Espaço que sobra dentro de um registro
+ - Colocar o espaço que sobrou na lista encadeada como um registro eliminado
 
 #### Fragmentação externa
+ - O espaço que sobrou dentro de um registro que foi colocado na lista encadeada como um registro
+ eliminado
+ - O espaço é muito pequeno, e não pode armazenar nenhum dado
 
-
+## 5
 
 
