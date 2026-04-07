@@ -362,3 +362,75 @@ A função fseek(FILE *stream, long int offset, int whence) da biblioteca C defi
 ```
 
 ##
+
+## 3. Organização em Campos e Registros
+
+### Organização de arquivos
+Geralmente serão compostos por "campo", que irá representar o tipo de informação, e "registro" o qual representa o conjunto de campos.
+
+E como prícipio fundamental em relação a organização de arquivos é de que um registro salvo não pode recuperar suas unidades lógicas, sendo que a informação se transforma em um conglomerado de caracteres, fazendo com que seja necessário a utilização de certo métodos de organização para conseguir extrair os dados realizando o mapeamento de unidade lógica.
+
+Dessa forma temos os seguinte tipos de organização:
+
+    - Campos de tamanho fixo
+    - Campos com indicador de comprimento
+    - Campos com uso de delimitadores
+    - Campos com uso de tag
+
+### Campos de tamanho fixo
+Nesse método temos que cada campo ocupa um tamnho fixo de bytes do arquivo, o que de certa forma ajuda na coleta de informação pois esse tamanho do campo já é conhecido. Porém, faz com que o espaço alocado cresça exponencialmente causando desperdicio.
+
+### Campos com indicador de comprimento
+Nesse método temos que o tamanho de cada campo é salvo primeiro, sendo utilizado apenas um único byte para representar esse tamanho. É util e situações onde é necessário saber o tamanho do campo antes de ler o campo, porém, causa lentidão na leitura dos dados, uma vez que, se tem um passo a mais a ser executado.
+
+### Campos separados por delimitadores
+Nesse método temos a inserção de um caracter especial no final de cada campo, em que esse caracter não pode ser um caracter válido. Dessa forma, a vantagem de utilizar esse método é evitar campos de dados vazios, porém causa atraso na leitura de dados, pois também adiciona mais um passo de execução, além de obrigar a leitura caracter a caracter.
+
+### Campos separados por tags
+Nesse método temos a separação dos campos por uma tag do tipo "keyword=value" e adicionando um caracter especial no final do campo. Dessa forma, temos como vantagem a fácil identificação do campos e os seus valores, porém ainda mantemos o atraso de leituras pela a adição de mais um passo de leitura.
+
+## 3.1 Organização de arquivos em registros
+Como dito anteriormente temos que um registro é um conjuto de campos que são agrupados de tal forma a ser manter uma associação a uma entidade lógica. E como anteriormente também temos métodos de regsitros.
+
+    - Registros com tamanho fixo
+        - campos de tamanho fixo
+        - campos de tamanho variável
+
+    - Registros com tamanho variável
+        - Número fixo de campos
+        - Uso de delimitadores
+        - Indicador de tamanho
+        - Uso de índice
+
+### Registros de tamanho fixo
+Nesse método temos um valor fixo para todos os registros, podendo ter campos de tamnho fixo ou de tamanho variável. Exemplo disso são as strucs em C.
+
+Esse método permite acessar diretamente cada regsitro utilizando o RRN(Relative Record Number). Porém, pode causar desperdicio de memória secundária.
+
+
+## 4. Acesso, Manutenção e Reuso de espaço
+
+#### Registro de campos com tamanho fixo
+
+#### Manipulação de dados
+
+    - Inserção
+    - Atualização
+    - Remoção
+
+#### Reorganização imediata
+
+#### Compactação e reuso
+
+    - Reuso estático
+    - Reuso dinâmico
+        - Tamanho fixo
+        - Tamanho variável
+
+#### Fragmentação interna
+
+#### Fragmentação externa
+
+
+
+
