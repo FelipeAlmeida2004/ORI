@@ -496,16 +496,16 @@ Serve para guardar a estrutura do arquivo em um cabeçalho
     - Remoção
 
 #### Inseção
-![alt text](image.png)
+![alt text](assets/image.png)
 
 #### Atualização
-![alt text](image-1.png)
+![alt text](assets/image-1.png)
 
 No caso de acrecimo de tamanho ou campo de tamanho variável é necessário remover o registro para que ele seja atualizado.
 
 ## Remoção
  - ### Reorganização imediata
-    ![alt text](image-2.png)
+    ![alt text](assets/image-2.png)
 
     Elimina o registro e reoganiza o indice dos regitros que se mantiveram.
 
@@ -532,8 +532,8 @@ No caso de acrecimo de tamanho ou campo de tamanho variável é necessário remo
 
     ####
 
-    ![alt text](image-4.png) 
-    ![alt text](image-3.png)
+    ![alt text](assets/image-4.png) 
+    ![alt text](assets/image-3.png)
 
  - ### Reuso dinâmico
 
@@ -542,10 +542,10 @@ No caso de acrecimo de tamanho ou campo de tamanho variável é necessário remo
 
         No reuso dinâmico temos uma lista composta por RRNS marcados como removidos, armazena o cabeçalho do arquivo na cabeça da lista e inserção e reuso são feitas sempre no início da lista.
         ###
-        ![alt text](image-5.png)
-        ![alt text](image-6.png)
-        ![alt text](image-7.png)
-        ![alt text](image-8.png)
+        ![alt text](assets/image-5.png)
+        ![alt text](assets/image-6.png)
+        ![alt text](assets/image-7.png)
+        ![alt text](assets/image-8.png)
         ###
     - Tamanho variável:
         Como no tamanho fixo também precisamos de uma lista encadeada para os registros eliminados.
@@ -567,7 +567,7 @@ No caso de acrecimo de tamanho ou campo de tamanho variável é necessário remo
             - Worst-Fit: Escolhe o maior espaço possível
 
         ###
-        ![alt text](image-9.png)
+        ![alt text](assets/image-9.png)
 ###
 
 #### Fragmentação interna
